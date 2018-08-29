@@ -31,16 +31,24 @@ func (c Check) Roll() {
 }
 
 func buildDicePool(c Check, dice chan Die) {
-	buildDiePool(Ability, c.Ability, dice)
-	buildDiePool(Proficiency, c.Proficiency, dice)
-	buildDiePool(Boost, c.Boost, dice)
-	buildDiePool(Difficulty, c.Difficulty, dice)
-	buildDiePool(Challenge, c.Challenge, dice)
-	buildDiePool(Setback, c.Setback, dice)
+	var dicePoolGroup sync.WaitGroup
+
+	dicePoolGroup.Add(6)
+
+	go buildDiePool(&dicePoolGroup, Ability, c.Ability, dice)
+	go buildDiePool(&dicePoolGroup, Proficiency, c.Proficiency, dice)
+	go buildDiePool(&dicePoolGroup, Boost, c.Boost, dice)
+	go buildDiePool(&dicePoolGroup, Difficulty, c.Difficulty, dice)
+	go buildDiePool(&dicePoolGroup, Challenge, c.Challenge, dice)
+	go buildDiePool(&dicePoolGroup, Setback, c.Setback, dice)
+
+	dicePoolGroup.Wait()
 	close(dice)
 }
 
-func buildDiePool(d Die, count int, dice chan Die) {
+func buildDiePool(dicePoolWorkgroup *sync.WaitGroup, d Die, count int, dice chan Die) {
+	defer dicePoolWorkgroup.Done()
+
 	for index := 0; index < count; index++ {
 		dice <- d
 	}
