@@ -7,6 +7,7 @@ import (
 	"time"
 )
 
+// Die reperesents a single type of die used in a pool
 type Die struct {
 	Symbol Symbol
 	Color  Color
@@ -15,11 +16,13 @@ type Die struct {
 	faces         []Result
 }
 
+// Roll is the outcome of rolling a specific Die
 type Roll struct {
 	Die    Die
 	Result Result
 }
 
+// Roll rolls the die and returns the outcome.
 func (d Die) Roll() Roll {
 	faceIndex, _ := rand.Int(rand.Reader, d.numberOfFaces)
 	result := d.faces[faceIndex.Int64()]

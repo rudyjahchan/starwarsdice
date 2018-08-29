@@ -4,6 +4,7 @@ import (
 	"fmt"
 )
 
+// Check represents the dice we need to roll to see if we accomplished a task.
 type Check struct {
 	Ability     int
 	Proficiency int
@@ -14,6 +15,7 @@ type Check struct {
 	Setback    int
 }
 
+// Roll peforms the check and reports the result.
 func (c Check) Roll() Result {
 	var result Result
 	result = result.Add(roll(Ability, c.Ability))

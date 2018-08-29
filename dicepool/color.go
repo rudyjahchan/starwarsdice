@@ -21,6 +21,7 @@ const Purple Color = 4
 // Red is a color
 const Red Color = 5
 
+// RESET makes the system return to standard color
 const RESET Color = 66
 
 func (c Color) String() string {
