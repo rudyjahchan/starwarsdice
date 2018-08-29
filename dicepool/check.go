@@ -54,18 +54,16 @@ func buildDiePool(dicePoolWorkgroup *sync.WaitGroup, d Die, count int, dice chan
 	}
 }
 
-func roller(rollersGroup *sync.WaitGroup, dice chan Die, rolls chan Roll) {
+func roller(rollersGroup *sync.WaitGroup, die Die, rolls chan Roll) {
 	defer rollersGroup.Done()
-	for die := range dice {
-		rolls <- die.Roll()
-	}
+	rolls <- die.Roll()
 }
 
 func roll(dice chan Die, rolls chan Roll) {
 	var rollersGroup sync.WaitGroup
-	for index := 0; index < 100; index++ {
+	for die := range dice {
 		rollersGroup.Add(1)
-		go roller(&rollersGroup, dice, rolls)
+		go roller(&rollersGroup, die, rolls)
 	}
 	rollersGroup.Wait()
 	close(rolls)
