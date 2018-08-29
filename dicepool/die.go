@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"fmt"
 	"math/big"
+	"time"
 )
 
 type Die struct {
@@ -22,6 +23,7 @@ type Roll struct {
 func (d Die) Roll() Roll {
 	faceIndex, _ := rand.Int(rand.Reader, d.numberOfFaces)
 	result := d.faces[faceIndex.Int64()]
+	time.Sleep(100 * time.Millisecond)
 	return Roll{d, result}
 }
 
